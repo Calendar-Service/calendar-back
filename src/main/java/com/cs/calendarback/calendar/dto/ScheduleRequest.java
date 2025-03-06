@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public record CalendarRequest(
+public record ScheduleRequest(
         String title,
         String note,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

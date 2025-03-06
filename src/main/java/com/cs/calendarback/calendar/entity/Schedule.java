@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Entity
-@Table(name = "calendar")
-public class Calendar extends BaseEntity {
+@Table(name = "schedule")
+public class Schedule extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "calendar_id")
+    @Column(name = "schedule_id")
     private Long id;
 
     @Column(name = "title", nullable = false)
@@ -36,11 +36,11 @@ public class Calendar extends BaseEntity {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    public static Calendar create(String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Long userId) {
-        return new Calendar(null, title, note, startDateTime, endDateTime, userId);
+    public static Schedule create(String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Long userId) {
+        return new Schedule(null, title, note, startDateTime, endDateTime, userId);
     }
 
-    public static Calendar update(Long id, String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Long userId) {
-        return new Calendar(id, title, note, startDateTime, endDateTime, userId);
+    public static Schedule update(Long id, String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Long userId) {
+        return new Schedule(id, title, note, startDateTime, endDateTime, userId);
     }
 }
