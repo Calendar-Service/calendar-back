@@ -55,7 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.warn("Exception occur: ", exception);
 
         String requestUri = request.getDescription(false);
-        if (requestUri.contains("/v3/api-docs") || requestUri.contains("/swagger-ui")) {
+        if (requestUri.contains("/v1/api-docs") || requestUri.contains("/swagger-ui")) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
