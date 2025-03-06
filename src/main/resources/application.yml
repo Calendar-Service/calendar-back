@@ -14,3 +14,13 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MariaDBDialect
+springdoc:
+  use-management-port: false
+  show-actuator: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  api-docs:
+    enabled: true
+    path: /v1/api-docs
+  override-with-generic-response: false
