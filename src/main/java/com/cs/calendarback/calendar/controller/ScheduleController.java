@@ -3,7 +3,6 @@ package com.cs.calendarback.calendar.controller;
 
 import com.cs.calendarback.calendar.dto.ScheduleRequest;
 import com.cs.calendarback.calendar.dto.ScheduleResponse;
-import com.cs.calendarback.calendar.dto.SearchDate;
 import com.cs.calendarback.calendar.entity.Schedule;
 import com.cs.calendarback.calendar.service.ScheduleService;
 import com.cs.calendarback.config.exception.ErrorResponse;
@@ -14,9 +13,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -57,9 +58,11 @@ public class ScheduleController {
     }
     @Operation(summary = "특정 날짜로 일정 목록 조회", description = "특정 날짜로 일정 목록들을 조회합니다.")
     @GetMapping("/dates")
-    public ResponseEntity<List<ScheduleResponse>> getSearchDates(@RequestBody SearchDate request) {
-        List<Schedule> Schedules = scheduleService.getSearchDates(request.getStartOfDay(), request.getEndOfDay());
-        return ResponseEntity.ok(ScheduleResponse.from(Schedules));
+    public ResponseEntity<List<ScheduleResponse>> getSearchDates(
+            @RequestParam("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate searchDate) {
+
+        List<Schedule> schedules = scheduleService.getSearchDates(searchDate.atStartOfDay(), searchDate.atTime(23, 59, 59));
+        return ResponseEntity.ok(ScheduleResponse.from(schedules));
     }
 
     @Operation(summary = "일정 수정", description = "등록된 일정 수정합니다.")
