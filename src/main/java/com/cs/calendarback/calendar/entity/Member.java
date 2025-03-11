@@ -22,6 +22,9 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
@@ -30,7 +33,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Schedule> schedules = new ArrayList<>();
 
-    public static Member create(String email, String password) {
-        return new Member(null, email, password, new ArrayList<>());
+    public static Member create(String name, String email, String password) {
+        return new Member(null, name, email, password, new ArrayList<>());
     }
 }
