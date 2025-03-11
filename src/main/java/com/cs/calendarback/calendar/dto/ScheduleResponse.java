@@ -11,7 +11,7 @@ public record ScheduleResponse(
         String note,
         LocalDateTime startDateTime,
         LocalDateTime endDateTime,
-        Long userId
+        Long memberId
 ) {
     public static ScheduleResponse from(Schedule schedule) {
         return new ScheduleResponse(
@@ -20,7 +20,7 @@ public record ScheduleResponse(
                 schedule.getNote(),
                 schedule.getStartDateTime(),
                 schedule.getEndDateTime(),
-                schedule.getUserId()
+                schedule.getMemberId()
         );
     }
 

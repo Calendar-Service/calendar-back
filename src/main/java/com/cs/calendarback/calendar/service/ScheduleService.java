@@ -22,7 +22,7 @@ public class ScheduleService {
     }
 
     public Schedule create(ScheduleRequest request) {
-        Schedule schedule =  Schedule.create(request.title(), request.note(), request.startDateTime(), request.endDateTime(), request.userId());
+        Schedule schedule =  Schedule.create(request.title(), request.note(), request.startDateTime(), request.endDateTime(), request.memberId());
          return scheduleRepository.save(schedule);
     }
 
@@ -36,7 +36,7 @@ public class ScheduleService {
 
     public Schedule update(Long id, ScheduleRequest request) {
         scheduleRepository.findById(id).orElseThrow(() -> new CoreException(ErrorType.SCHEDULE_NOT_FOUND, id));
-        Schedule schedule = Schedule.update(id, request.title(), request.note(), request.startDateTime(), request.endDateTime(), request.userId());
+        Schedule schedule = Schedule.update(id, request.title(), request.note(), request.startDateTime(), request.endDateTime(), request.memberId());
         return scheduleRepository.save(schedule);
     }
 

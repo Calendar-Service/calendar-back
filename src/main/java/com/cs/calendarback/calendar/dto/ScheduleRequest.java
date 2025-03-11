@@ -20,6 +20,6 @@ public record ScheduleRequest(
         LocalDateTime endDateTime,
 
         @NotBlank(message = "사용자 ID 필수 입력 값입니다.")
-        Long userId
+        Long memberId
 ) {
 }
