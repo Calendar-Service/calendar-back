@@ -20,12 +20,12 @@ public record ScheduleResponse(
                 schedule.getNote(),
                 schedule.getStartDateTime(),
                 schedule.getEndDateTime(),
-                schedule.getMemberId()
+                schedule.getMember().getId()
         );
     }
 
-    public static List<ScheduleResponse> from(List<Schedule> Schedules) {
-        return Schedules.stream()
+    public static List<ScheduleResponse> from(List<Schedule> schedules) {
+        return schedules.stream()
                 .map(ScheduleResponse::from)
                 .toList();
     }

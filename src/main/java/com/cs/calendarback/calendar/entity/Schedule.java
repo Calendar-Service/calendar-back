@@ -33,14 +33,14 @@ public class Schedule extends BaseEntity {
     @Column(name = "endDateTime", nullable = false)
     private LocalDateTime endDateTime;
 
-    @Column(name = "member_id", nullable = false)
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
 
-    public static Schedule create(String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId) {
-        return new Schedule(null, title, note, startDateTime, endDateTime, memberId);
+    public static Schedule create(String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Member member) {
+        return new Schedule(null, title, note, startDateTime, endDateTime, member);
     }
 
-    public static Schedule update(Long id, String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId) {
-        return new Schedule(id, title, note, startDateTime, endDateTime, memberId);
+    public static Schedule update(Long id, String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Member member) {
+        return new Schedule(id, title, note, startDateTime, endDateTime, member);
     }
 }
