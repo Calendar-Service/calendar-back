@@ -1,5 +1,5 @@
 package com.cs.calendarback.calendar.entity.enums;
 
-public enum Author {
-    ADMIN, USER
+public enum Role {
+    ROLE_ADMIN, ROLE_USER
 }

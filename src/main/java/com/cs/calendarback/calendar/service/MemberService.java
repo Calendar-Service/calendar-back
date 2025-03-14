@@ -29,7 +29,7 @@ public class MemberService {
         if (optionalMember.isPresent()) {
             throw new CoreException(ErrorType.EMAIL_ALREADY_EXISTS, request.email());
         }
-        Member member = Member.create(request.name(), request.email(), request.password());
+        Member member = Member.create(request.name(), request.email(), request.password(), request.role());
         return memberRepository.save(member);
     }
 
