@@ -15,7 +15,7 @@ public record ScheduleResponse(
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         String endDateTime,
-        Long userId
+        Long memberId
 ) {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -26,7 +26,7 @@ public record ScheduleResponse(
                 schedule.getNote(),
                 schedule.getStartDateTime().format(FORMATTER),
                 schedule.getEndDateTime().format(FORMATTER),
-                schedule.getUserId()
+                schedule.getMember().getId()
         );
     }
 
