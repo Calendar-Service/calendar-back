@@ -1,6 +1,7 @@
 package com.cs.calendarback.calendar.controller;
 
 
+import com.cs.calendarback.calendar.dto.Result;
 import com.cs.calendarback.calendar.dto.ScheduleRequest;
 import com.cs.calendarback.calendar.dto.ScheduleResponse;
 import com.cs.calendarback.calendar.entity.Schedule;
@@ -29,9 +30,32 @@ public class ScheduleController {
 
     @Operation(summary = "모든 일정 조회", description = "등록된 모든 일정를 조회합니다.")
     @GetMapping
-    public ResponseEntity<List<ScheduleResponse>> getSchedules() {
-        List<Schedule> Schedules = scheduleService.getSchedules();
-        return ResponseEntity.ok(ScheduleResponse.from(Schedules));
+    public ResponseEntity<Result<List<ScheduleResponse>>> getSchedules() {
+        List<Schedule> schedules = scheduleService.getSchedules();
+        List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
+        return ResponseEntity.ok(new Result<>(response.size(), response));
+    }
+
+    @Operation(summary = "월별 일정 조회", description = "등록된 월별 일정을 조회합니다.")
+    @GetMapping("/{year}/{month}")
+    public ResponseEntity<Result<List<ScheduleResponse>>> getSchedulesByYearANdMonth(
+            @PathVariable int year,
+            @PathVariable int month) {
+        List<Schedule> schedules = scheduleService.getSchedulesByYearAndMonth(year, month);
+        List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
+        return ResponseEntity.ok(new Result<>(response.size(), response));
+    }
+
+    @Operation(summary = "특정 날짜 일정 조회", description = "특정 날짜에 해당하는 일정을 조회합니다.")
+    @GetMapping("/{year}/{month}/dates")
+    public ResponseEntity<Result<List<ScheduleResponse>>> getSchedulesByDate(
+            @PathVariable int year,
+            @PathVariable int month,
+            @RequestParam("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate searchDate) {
+
+        List<Schedule> schedules = scheduleService.getSearchDates(searchDate);
+        List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
+        return ResponseEntity.ok(new Result<>(response.size(), response));
     }
 
     @Operation(summary = "일정을 등록", description = "새로운 일정을 등록합니다.")
@@ -40,8 +64,8 @@ public class ScheduleController {
     })
     @PostMapping
     public ResponseEntity<ScheduleResponse> create(@RequestBody @Valid ScheduleRequest request) {
-        Schedule calendar = scheduleService.create(request);
-        return ResponseEntity.ok(ScheduleResponse.from(calendar));
+        Schedule schedule = scheduleService.create(request);
+        return ResponseEntity.ok(ScheduleResponse.from(schedule));
     }
 
     @Operation(summary = "일정을 상세 조회", description = "일정 ID로 상세 조회합니다.")
@@ -53,16 +77,8 @@ public class ScheduleController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponse> getSchedule(@PathVariable("id") Long id) {
-        Schedule calendar = scheduleService.getSchedule(id);
-        return ResponseEntity.ok(ScheduleResponse.from(calendar));
-    }
-    @Operation(summary = "특정 날짜로 일정 목록 조회", description = "특정 날짜로 일정 목록들을 조회합니다.")
-    @GetMapping("/dates")
-    public ResponseEntity<List<ScheduleResponse>> getSearchDates(
-            @RequestParam("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate searchDate) {
-
-        List<Schedule> schedules = scheduleService.getSearchDates(searchDate.atStartOfDay(), searchDate.atTime(23, 59, 59));
-        return ResponseEntity.ok(ScheduleResponse.from(schedules));
+        Schedule schedule = scheduleService.getSchedule(id);
+        return ResponseEntity.ok(ScheduleResponse.from(schedule));
     }
 
     @Operation(summary = "일정 수정", description = "등록된 일정 수정합니다.")
