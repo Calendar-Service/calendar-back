@@ -34,6 +34,7 @@ public class Schedule extends BaseEntity {
     private LocalDateTime endDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     public static Schedule create(String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Member member) {
