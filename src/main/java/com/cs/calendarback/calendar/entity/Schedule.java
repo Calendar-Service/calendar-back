@@ -1,6 +1,8 @@
 package com.cs.calendarback.calendar.entity;
 
 import com.cs.calendarback.calendar.entity.common.BaseEntity;
+import com.cs.calendarback.config.exception.CoreException;
+import com.cs.calendarback.config.exception.ErrorType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -38,10 +40,18 @@ public class Schedule extends BaseEntity {
     private Member member;
 
     public static Schedule create(String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Member member) {
+        validateDates(startDateTime, endDateTime);
         return new Schedule(null, title, note, startDateTime, endDateTime, member);
     }
 
     public static Schedule update(Long id, String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Member member) {
+        validateDates(startDateTime, endDateTime);
         return new Schedule(id, title, note, startDateTime, endDateTime, member);
+    }
+
+    public static void validateDates(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        if (startDateTime.isAfter(endDateTime)) {
+            throw new CoreException(ErrorType.INVALID_DATE_RANGE, startDateTime);
+        }
     }
 }
