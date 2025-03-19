@@ -10,14 +10,14 @@ public record ScheduleResponse(
         Long id,
         String title,
         String note,
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         String startDateTime,
 
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         String endDateTime,
         Long memberId
 ) {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public static ScheduleResponse from(Schedule schedule) {
         return new ScheduleResponse(
