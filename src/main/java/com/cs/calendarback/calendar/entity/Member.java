@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +39,16 @@ public class Member extends BaseEntity {
     private List<Schedule> schedules = new ArrayList<>();
 
     public static Member create(String name, String email, String password, Role role) {
-        return new Member(null, name, email, password, role, new ArrayList<>());
+        return new Member(null, name, email, encodePassword(password), role, new ArrayList<>());
     }
 
     public static Member ofEmailAndRole(String email, Role role) {
         return new Member(null, "tempName", email, "tempPassword", role, new ArrayList<>());
+    }
+
+    private static String encodePassword(String rawPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(rawPassword);
     }
 
 }
