@@ -24,7 +24,7 @@ public record ScheduleRequest(
         @NotNull(message = "사용자 ID 필수 입력 값입니다.")
         Long memberId
 ) {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public LocalDateTime toStartDateTime() {
         return parseDateTime(startDateTime, "시작 일정");
