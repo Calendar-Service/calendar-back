@@ -1,6 +1,8 @@
 package com.cs.calendarback.config;
 
 
+import com.cs.calendarback.calendar.service.RefreshService;
+import com.cs.calendarback.jwt.CustomLogoutFilter;
 import com.cs.calendarback.jwt.JWTFilter;
 import com.cs.calendarback.jwt.JWTUtil;
 import com.cs.calendarback.jwt.LoginFilter;
@@ -16,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @RequiredArgsConstructor
 @Configuration
@@ -25,6 +28,8 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
 
     private final JWTUtil jwtUtil;
+
+    private final RefreshService refreshService;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -49,8 +54,10 @@ public class SecurityConfig {
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         //경로별 인가 작업
-        http.authorizeHttpRequests((auth) -> auth.requestMatchers("/api/v1/**", "/").permitAll().requestMatchers("/admin").hasRole("ADMIN").anyRequest().authenticated());
-        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.authorizeHttpRequests((auth) -> auth.requestMatchers("/api/v1/**", "/", "/login","/reissue").permitAll().requestMatchers("/admin").hasRole("ADMIN").anyRequest().authenticated());
+        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshService), UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshService), LogoutFilter.class);
         //세션 설정
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

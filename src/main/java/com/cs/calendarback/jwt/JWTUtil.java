@@ -14,6 +14,7 @@ import java.util.Date;
 
 @Component
 public class JWTUtil {
+
     private final Key key;
 
     public JWTUtil(@Value("${spring.jwt.secret}") String secret) {
@@ -31,13 +32,17 @@ public class JWTUtil {
     }
 
     public Boolean isExpired(String token) {
-
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration().before(new Date());
     }
 
-    public String createJwt(String email, String role, Long expiredMs) {
+    public String getCategory(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("category", String.class);
+    }
+
+    public String createJwt(String category, String email, String role, Long expiredMs) {
 
         Claims claims = Jwts.claims();
+        claims.put("category", category);
         claims.put("email", email);
         claims.put("role", role);
 
@@ -48,4 +53,5 @@ public class JWTUtil {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
 }
