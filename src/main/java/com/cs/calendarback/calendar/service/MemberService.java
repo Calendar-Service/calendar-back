@@ -5,6 +5,7 @@ import com.cs.calendarback.calendar.entity.Member;
 import com.cs.calendarback.calendar.repository.MemberRepository;
 import com.cs.calendarback.config.exception.CoreException;
 import com.cs.calendarback.config.exception.ErrorType;
+import com.cs.calendarback.kakao.dto.KakaoMemberInfoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ public class MemberService {
         if (optionalMember.isPresent()) {
             throw new CoreException(ErrorType.EMAIL_ALREADY_EXISTS, request.email());
         }
-        Member member = Member.create(request.name(), request.email(), request.password(), request.role());
+        Member member = Member.create(request.name(), request.email(), request.password());
         return memberRepository.save(member);
     }
 
