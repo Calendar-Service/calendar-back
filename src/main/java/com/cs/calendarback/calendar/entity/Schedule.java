@@ -3,6 +3,7 @@ package com.cs.calendarback.calendar.entity;
 import com.cs.calendarback.calendar.entity.common.BaseEntity;
 import com.cs.calendarback.config.exception.CoreException;
 import com.cs.calendarback.config.exception.ErrorType;
+import com.cs.calendarback.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
