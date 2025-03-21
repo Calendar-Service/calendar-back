@@ -29,6 +29,7 @@ public class KakaoService {
 
     private static final String KAKAO_AUTH_TOKEN_URL_HOST = "https://kauth.kakao.com";
     private static final String KAKAO_AUTH_USER_URL_HOST = "https://kapi.kakao.com";
+    private static final String KAKAO_LOGOUT_URL = "https://kapi.kakao.com/v1/user/logout";
 
 
     public KakaoTokenResponse getAccessTokenFromKakao(String code) {
@@ -41,10 +42,8 @@ public class KakaoService {
                         .build(true))
                 .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
-                        Mono.error(new CoreException(ErrorType.KAKAO_INVALID_PARAMETER, clientId)))
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse ->
-                        Mono.error(new CoreException(ErrorType.KAKAO_INTERNAL_SERVER_ERROR, clientId)))
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CoreException(ErrorType.KAKAO_INVALID_PARAMETER, "getAccessTokenForKakao")))
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new CoreException(ErrorType.KAKAO_INTERNAL_SERVER_ERROR, "getAccessTokenForKakao")))
                 .bodyToMono(KakaoTokenResponse.class)
                 .block();
 
@@ -54,15 +53,15 @@ public class KakaoService {
         return kakaoTokenResponseDto;
     }
 
-    public KakaoMemberResponse getUserInfo(String accessToken) {
+    public KakaoMemberResponse getMemberInfo(String accessToken) {
 
         KakaoMemberResponse userInfo = WebClient.create(KAKAO_AUTH_USER_URL_HOST).get()
                 .uri(uriBuilder -> uriBuilder.scheme("https").path("/v2/user/me").build(true))
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CoreException(ErrorType.KAKAO_INVALID_PARAMETER, clientId)))
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new CoreException(ErrorType.KAKAO_INTERNAL_SERVER_ERROR, clientId)))
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CoreException(ErrorType.KAKAO_INVALID_PARAMETER,  "memberInfo")))
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new CoreException(ErrorType.KAKAO_INTERNAL_SERVER_ERROR, "memberInfo")))
                 .bodyToMono(KakaoMemberResponse.class)
                 .block();
 
@@ -72,14 +71,16 @@ public class KakaoService {
         return userInfo;
     }
 
-    public void kakaoUnlink(String accessToken) {
-        String url = "https://kapi.kakao.com/v1/user/logout";
 
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
-
-        HttpEntity<String> request = new HttpEntity<>(headers);
-        restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+    public void kakaoLogout(String accessToken) {
+        WebClient.create()
+                .post()
+                .uri(KAKAO_LOGOUT_URL)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CoreException(ErrorType.KAKAO_INVALID_PARAMETER, "logout")))
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new CoreException(ErrorType.KAKAO_INTERNAL_SERVER_ERROR, "logout")))
+                .bodyToMono(String.class)
+                .block();
     }
 }

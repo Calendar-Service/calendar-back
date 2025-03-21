@@ -22,7 +22,7 @@ public class KakaoLoginController {
     public ResponseEntity<?> callback(@RequestParam("code") String code, HttpServletResponse response) {
 
         KakaoTokenResponse kakaoToken = kakaoService.getAccessTokenFromKakao(code);
-        KakaoMemberResponse kakaoMember = kakaoService.getUserInfo(kakaoToken.getAccessToken());
+        KakaoMemberResponse kakaoMember = kakaoService.getMemberInfo(kakaoToken.getAccessToken());
         Long memberId = memberService.createKakaoMember(kakaoMember);
         KakaoLoginResponse kakaoLogin = KakaoLoginResponse.of(memberId);
 
@@ -35,7 +35,7 @@ public class KakaoLoginController {
 
     @GetMapping("/oauth/kakao/logout")
     public ResponseEntity<?> kakaoLogout(@RequestHeader("Authorization") String accessToken, HttpServletResponse response) {
-        kakaoService.kakaoUnlink(accessToken);
+        kakaoService.kakaoLogout(accessToken);
         response.addCookie(deleteCookie("refresh"));
         return ResponseEntity.ok("카카오 로그아웃 완료");
     }
