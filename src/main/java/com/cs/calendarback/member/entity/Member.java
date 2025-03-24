@@ -1,5 +1,6 @@
-package com.cs.calendarback.calendar.entity;
+package com.cs.calendarback.member.entity;
 
+import com.cs.calendarback.calendar.entity.Schedule;
 import com.cs.calendarback.calendar.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,24 +22,18 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String nickName;
 
     @Column(nullable = false)
+    private Long authId;
+
     private String email;
-
-    @Column(nullable = false)
-    private String password;
 
     @OneToMany(mappedBy = "member")
     private List<Schedule> schedules = new ArrayList<>();
 
-    public static Member create(String name, String email, String password) {
-        return new Member(null, name, email, password, new ArrayList<>());
+    public static Member create(String nickName, Long authId, String email ) {
+        return new Member(null, nickName, authId, email, new ArrayList<>());
     }
-
-    public static Member ofEmailAndRole(String email) {
-        return new Member(null, "tempName", email, "tempPassword", new ArrayList<>());
-    }
-
 
 }

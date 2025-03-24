@@ -1,11 +1,11 @@
-package com.cs.calendarback.calendar.controller;
+package com.cs.calendarback.member.controller;
 
 
-import com.cs.calendarback.calendar.dto.MemberRequest;
-import com.cs.calendarback.calendar.dto.MemberResponse;
-import com.cs.calendarback.calendar.entity.Member;
-import com.cs.calendarback.calendar.service.MemberService;
+import com.cs.calendarback.member.entity.Member;
 import com.cs.calendarback.config.exception.ErrorResponse;
+import com.cs.calendarback.member.dto.MemberRequest;
+import com.cs.calendarback.member.dto.MemberResponse;
+import com.cs.calendarback.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,16 +30,6 @@ public class MemberController {
     public ResponseEntity<List<MemberResponse>> getMembers() {
         List<Member> members = memberService.getMembers();
         return ResponseEntity.ok(MemberResponse.from(members));
-    }
-
-    @Operation(summary = "사용자를 등록", description = "새로운 사용자를 등록합니다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "사용자 등록 성공"),
-    })
-    @PostMapping
-    public ResponseEntity<MemberResponse> create(@RequestBody @Valid MemberRequest request) {
-        Member member = memberService.create(request);
-        return ResponseEntity.ok(MemberResponse.from(member));
     }
 
     @Operation(summary = "사용자를 상세 조회", description = "사용자 ID로 상세 조회합니다.")

@@ -1,9 +1,9 @@
 package com.cs.calendarback.calendar.service;
 
 import com.cs.calendarback.calendar.dto.ScheduleRequest;
-import com.cs.calendarback.calendar.entity.Member;
+import com.cs.calendarback.member.entity.Member;
 import com.cs.calendarback.calendar.entity.Schedule;
-import com.cs.calendarback.calendar.repository.MemberRepository;
+import com.cs.calendarback.member.repository.MemberRepository;
 import com.cs.calendarback.calendar.repository.ScheduleRepository;
 import com.cs.calendarback.config.exception.CoreException;
 import com.cs.calendarback.config.exception.ErrorType;

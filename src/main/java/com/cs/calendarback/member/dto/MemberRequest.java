@@ -1,4 +1,4 @@
-package com.cs.calendarback.calendar.dto;
+package com.cs.calendarback.member.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -10,10 +10,7 @@ public record ScheduleResponse(
         Long id,
         String title,
         String note,
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         String startDateTime,
-
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         String endDateTime,
         Long memberId
 ) {
