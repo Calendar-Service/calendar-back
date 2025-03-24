@@ -22,7 +22,9 @@ public record ScheduleRequest(
         String endDateTime, // String으로 받기
 
         @NotNull(message = "사용자 ID 필수 입력 값입니다.")
-        Long memberId
+        Long memberId,
+
+        Long categoryId
 ) {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -40,5 +42,9 @@ public record ScheduleRequest(
         } catch (DateTimeParseException e) {
             throw new CoreException(ErrorType.INVALID_DATE_FORMAT, fieldName);
         }
+    }
+
+    public Long categoryId() {
+        return categoryId != null ? categoryId : 1L;
     }
 }
