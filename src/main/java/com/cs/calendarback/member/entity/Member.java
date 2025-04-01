@@ -1,5 +1,6 @@
 package com.cs.calendarback.member.entity;
 
+import com.cs.calendarback.calendar.entity.Category;
 import com.cs.calendarback.calendar.entity.Schedule;
 import com.cs.calendarback.calendar.entity.common.BaseEntity;
 import jakarta.persistence.*;
@@ -32,8 +33,11 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Schedule> schedules = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Category> categories = new ArrayList<>();
+
     public static Member create(String nickName, Long authId, String email ) {
-        return new Member(null, nickName, authId, email, new ArrayList<>());
+        return new Member(null, nickName, authId, email, new ArrayList<>(), new ArrayList<>());
     }
 
 }
