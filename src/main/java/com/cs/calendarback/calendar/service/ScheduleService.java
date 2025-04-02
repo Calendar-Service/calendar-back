@@ -45,15 +45,11 @@ public class ScheduleService {
         return scheduleRepository.findSchedulesByDateRangeAndCategoryId(startDateTime, endDateTime, memberId, categoryId);
     }
 
-    public List<Schedule> getSearchDates(LocalDate searchDate, Long memberId, Long categoryId) {
-        LocalDateTime startDateTime = searchDate.atStartOfDay();
-        LocalDateTime endDateTime = searchDate.atTime(23, 59, 59);
+    public List<Schedule> getSearchDates(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId) {
         return scheduleRepository.findSchedulesByDateRange(startDateTime, endDateTime, memberId);
     }
 
-    public List<Schedule> getSearchDatesAndCategory(LocalDate searchDate, Long memberId, Long categoryId) {
-        LocalDateTime startDateTime = searchDate.atStartOfDay();
-        LocalDateTime endDateTime = searchDate.atTime(23, 59, 59);
+    public List<Schedule> getSearchDatesAndCategory(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId, Long categoryId) {
         return scheduleRepository.findSchedulesByDateRangeAndCategoryId(startDateTime, endDateTime, memberId, categoryId);
     }
 
