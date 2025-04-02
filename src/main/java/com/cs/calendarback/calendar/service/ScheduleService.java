@@ -37,17 +37,11 @@ public class ScheduleService {
         return scheduleRepository.findByMemberIdAndCategoryId(memberId, categoryId);
     }
 
-    public List<Schedule> getSchedulesByYearAndMonth(int year, int month, Long memberId) {
-        YearMonth yearMonth = YearMonth.of(year, month);
-        LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
-        LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+    public List<Schedule> getSchedulesByYearAndMonth(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId) {
         return scheduleRepository.findSchedulesByDateRange(startDateTime, endDateTime, memberId);
     }
 
-    public List<Schedule> getSchedulesByYearAndMonthAndCategory(int year, int month, Long memberId, Long categoryId) {
-        YearMonth yearMonth = YearMonth.of(year, month);
-        LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
-        LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+    public List<Schedule> getSchedulesByYearAndMonthAndCategory(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId, Long categoryId) {
         return scheduleRepository.findSchedulesByDateRangeAndCategoryId(startDateTime, endDateTime, memberId, categoryId);
     }
 

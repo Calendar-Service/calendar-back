@@ -1,10 +1,7 @@
 package com.cs.calendarback.calendar.controller;
 
 
-import com.cs.calendarback.calendar.dto.Result;
-import com.cs.calendarback.calendar.dto.ScheduleCreateRequest;
-import com.cs.calendarback.calendar.dto.ScheduleRequest;
-import com.cs.calendarback.calendar.dto.ScheduleResponse;
+import com.cs.calendarback.calendar.dto.*;
 import com.cs.calendarback.calendar.entity.Schedule;
 import com.cs.calendarback.calendar.service.ScheduleService;
 import com.cs.calendarback.config.exception.ErrorResponse;
@@ -49,12 +46,13 @@ public class ScheduleController {
             @PathVariable int month,
             @RequestBody @Valid ScheduleRequest request) {
 
-        List<Schedule> schedules;
+        CreateMonthDateRange createMonthDateRange = CreateMonthDateRange.of(year, month);
 
+        List<Schedule> schedules;
         if (request.categoryId() == null) {
-            schedules = scheduleService.getSchedulesByYearAndMonth(year, month, request.memberId());
+            schedules = scheduleService.getSchedulesByYearAndMonth(createMonthDateRange.startDateTime(), createMonthDateRange.endDateTime(), request.memberId());
         } else {
-            schedules = scheduleService.getSchedulesByYearAndMonthAndCategory(year, month, request.memberId(), request.categoryId());
+            schedules = scheduleService.getSchedulesByYearAndMonthAndCategory(createMonthDateRange.startDateTime(), createMonthDateRange.endDateTime(), request.memberId(), request.categoryId());
         }
         List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
         return ResponseEntity.ok(new Result<>(response.size(), response));
