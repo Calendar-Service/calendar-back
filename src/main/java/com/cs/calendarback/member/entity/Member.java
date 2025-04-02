@@ -39,5 +39,7 @@ public class Member extends BaseEntity {
     public static Member create(String nickName, Long authId, String email ) {
         return new Member(null, nickName, authId, email, new ArrayList<>(), new ArrayList<>());
     }
-
+    public static Member update(Long id, String nickName, Long authId, String email ) {
+        return new Member(id, nickName, authId, email, new ArrayList<>(), new ArrayList<>());
+    }
 }

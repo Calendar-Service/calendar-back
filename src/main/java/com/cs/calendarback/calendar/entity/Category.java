@@ -35,4 +35,8 @@ public class Category {
     public static Category create(String name, Member member) {
         return new Category(null, name, member, new ArrayList<>());
     }
+
+    public static Category update(Long id, String name, Member member) {
+        return new Category(id, name, member, new ArrayList<>());
+    }
 }
