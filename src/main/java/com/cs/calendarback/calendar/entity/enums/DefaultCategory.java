@@ -1,7 +1,6 @@
 package com.cs.calendarback.calendar.entity.enums;
 
 public enum DefaultCategory {
-    DEFAULT("기본값"),
     FRIEND("친구"),
     FAMILY("가족");
 

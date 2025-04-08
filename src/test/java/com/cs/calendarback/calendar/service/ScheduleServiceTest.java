@@ -67,9 +67,8 @@ class ScheduleServiceTest {
         member = Member.update(1L, "이승원", 12L, "ee@naver.com");
 
         categories = List.of(
-                Category.update(1L, DefaultCategory.DEFAULT.getName(), member),
-                Category.update(2L, DefaultCategory.FAMILY.getName(), member),
-                Category.update(3L, DefaultCategory.FRIEND.getName(), member)
+                Category.update(1L, DefaultCategory.FAMILY.getName(), member),
+                Category.update(2L, DefaultCategory.FRIEND.getName(), member)
         );
 
         schedules = List.of(
@@ -81,7 +80,7 @@ class ScheduleServiceTest {
                 Schedule.update(1L, "일정1", "일정 테스트1", LocalDateTime.now(), LocalDateTime.now(), member, categories.get(0))
         );
 
-        category = Category.update(1L, DefaultCategory.DEFAULT.getName(), member);
+        category = Category.update(1L, DefaultCategory.FAMILY.getName(), member);
         schedule = Schedule.update(1L, "일정1", "일정 테스트1", LocalDateTime.now(), LocalDateTime.now(), member, categories.get(0));
         scheduleUpdate = Schedule.update(1L, "일정 수정", "일정 노트 수정", LocalDateTime.now(), LocalDateTime.now(), member, categories.get(0));
 
