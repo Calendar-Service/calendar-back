@@ -3,6 +3,7 @@ package com.cs.calendarback.calendar.service;
 import com.cs.calendarback.calendar.dto.ScheduleCreateRequest;
 import com.cs.calendarback.calendar.entity.Category;
 import com.cs.calendarback.calendar.repository.CategoryRepository;
+import com.cs.calendarback.calendar.repository.ScheduleCustomRepository;
 import com.cs.calendarback.member.entity.Member;
 import com.cs.calendarback.calendar.entity.Schedule;
 import com.cs.calendarback.member.repository.MemberRepository;
@@ -27,28 +28,12 @@ public class ScheduleService {
 
     private final CategoryRepository categoryRepository;
 
-    public List<Schedule> getSchedules(Long memberId) {
-        return scheduleRepository.findByMemberId(memberId);
+    public List<Schedule> getSchedules(Long memberId, Long categoryId) {
+        return scheduleRepository.findSchedules(memberId, categoryId);
     }
 
-    public List<Schedule> getSchedulesAndCategory(Long memberId, Long categoryId) {
-        return scheduleRepository.findByMemberIdAndCategoryId(memberId, categoryId);
-    }
-
-    public List<Schedule> getSchedulesByYearAndMonth(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId) {
-        return scheduleRepository.findSchedulesByDateRange(startDateTime, endDateTime, memberId);
-    }
-
-    public List<Schedule> getSchedulesByYearAndMonthAndCategory(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId, Long categoryId) {
-        return scheduleRepository.findSchedulesByDateRangeAndCategoryId(startDateTime, endDateTime, memberId, categoryId);
-    }
-
-    public List<Schedule> getSearchDates(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId) {
-        return scheduleRepository.findSchedulesByDateRange(startDateTime, endDateTime, memberId);
-    }
-
-    public List<Schedule> getSearchDatesAndCategory(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId, Long categoryId) {
-        return scheduleRepository.findSchedulesByDateRangeAndCategoryId(startDateTime, endDateTime, memberId, categoryId);
+    public List<Schedule> getSchedulesByDateRange(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId, Long categoryId) {
+        return scheduleRepository.findSchedulesByDateRange(startDateTime, endDateTime, memberId, categoryId);
     }
 
     @Transactional

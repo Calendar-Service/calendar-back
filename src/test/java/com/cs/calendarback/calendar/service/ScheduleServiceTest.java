@@ -105,34 +105,15 @@ class ScheduleServiceTest {
         );
     }
 
+
     @Test
-    @DisplayName("모든 스케줄 조회 카테고리 미포함")
+    @DisplayName("모든 스케줄 조회")
     void getSchedules() {
         // given
-        doReturn(schedules).when(scheduleRepository).findByMemberId(member.getId());
+        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedules(member.getId(), categories.get(0).getId());
 
         // when
-        List<Schedule> result = scheduleService.getSchedules(member.getId());
-
-        // then
-        assertAll(
-                () -> assertNotNull(result),
-                () -> assertEquals(2, result.size()),
-                () -> assertEquals("일정1", result.get(0).getTitle()),
-                () -> assertEquals(result.get(0).getMember().getId(), member.getId()),
-                () -> assertEquals(result.get(0).getMember().getAuthId(), member.getAuthId()),
-                () -> assertEquals(result.get(0).getCategory().getName(), categories.get(0).getName())
-        );
-    }
-
-    @Test
-    @DisplayName("모든 스케줄 조회 카테고리 포함")
-    void getSchedulesAndCategory() {
-        // given
-        doReturn(schedulesAndCategory).when(scheduleRepository).findByMemberIdAndCategoryId(member.getId(), categories.get(0).getId());
-
-        // when
-        List<Schedule> result = scheduleService.getSchedulesAndCategory(member.getId(), categories.get(0).getId());
+        List<Schedule> result = scheduleService.getSchedules(member.getId(), categories.get(0).getId());
 
         // then
         assertAll(
@@ -145,38 +126,16 @@ class ScheduleServiceTest {
         );
     }
 
+
     @Test
-    @DisplayName("년월 스케줄 조회 카테고리 미포함")
+    @DisplayName("년월 스케줄 조회")
     void getSchedulesByYearAndMonth() {
         // given
         CreateDateRange createDateRange = CreateDateRange.monthOf(year, month);
-        doReturn(schedules).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId());
+        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
 
         // when
-        List<Schedule> result = scheduleService.getSchedulesByYearAndMonth(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId());
-
-        // then
-        assertAll(
-                () -> assertNotNull(result),
-                () -> assertEquals(2, result.size()),
-                () -> assertEquals("일정1", result.get(0).getTitle()),
-                () -> assertEquals(result.get(0).getMember().getId(), member.getId()),
-                () -> assertEquals(result.get(0).getMember().getAuthId(), member.getAuthId()),
-                () -> assertEquals(result.get(0).getStartDateTime().getYear(), year),
-                () -> assertEquals(result.get(result.size() - 1).getStartDateTime().getMonthValue(), month),
-                () -> assertEquals(result.get(0).getCategory().getName(), categories.get(0).getName())
-        );
-    }
-
-    @Test
-    @DisplayName("년월 스케줄 조회 카테고리 포함")
-    void getSchedulesByYearAndMonthAndCategory() {
-        // given
-        CreateDateRange createDateRange = CreateDateRange.monthOf(year, month);
-        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRangeAndCategoryId(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
-
-        // when
-        List<Schedule> result = scheduleService.getSchedulesByYearAndMonthAndCategory(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
+        List<Schedule> result = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
 
         // then
         assertAll(
@@ -194,38 +153,14 @@ class ScheduleServiceTest {
     }
 
     @Test
-    @DisplayName("특정날짜로 스케줄 조회 카테고리 미포함")
+    @DisplayName("특정날짜로 스케줄 조회")
     void getSearchDates() {
         // given
         CreateDateRange createDateRange = CreateDateRange.dateOf(seachDate);
-        doReturn(schedules).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId());
+        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
 
         // when
-        List<Schedule> result = scheduleService.getSearchDates(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId());
-
-        // then
-        assertAll(
-                () -> assertNotNull(result),
-                () -> assertEquals(2, result.size()),
-                () -> assertEquals("일정1", result.get(0).getTitle()),
-                () -> assertEquals(result.get(0).getMember().getId(), member.getId()),
-                () -> assertEquals(result.get(0).getMember().getAuthId(), member.getAuthId()),
-                () -> assertEquals(result.get(0).getStartDateTime().getYear(), year),
-                () -> assertEquals(result.get(result.size() - 1).getStartDateTime().getMonthValue(), month),
-                () -> assertEquals(result.get(0).getCategory().getName(), categories.get(0).getName())
-        );
-
-    }
-
-    @Test
-    @DisplayName("특정날짜로 스케줄 조회 카테고리 포함")
-    void getSearchDatesAndCategory() {
-        // given
-        CreateDateRange createDateRange = CreateDateRange.dateOf(seachDate);
-        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRangeAndCategoryId(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
-
-        // when
-        List<Schedule> result = scheduleService.getSearchDatesAndCategory(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
+        List<Schedule> result = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
         // then
         assertAll(
                 () -> assertNotNull(result),

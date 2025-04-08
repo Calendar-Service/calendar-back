@@ -29,12 +29,7 @@ public class ScheduleController {
     @Operation(summary = "모든 일정 조회", description = "등록된 모든 일정를 조회합니다.")
     @GetMapping
     public ResponseEntity<Result<List<ScheduleResponse>>> getSchedules(@RequestBody @Valid ScheduleRequest request) {
-        List<Schedule> schedules;
-        if (request.categoryId() == null) {
-            schedules = scheduleService.getSchedules(request.memberId());
-        } else {
-            schedules = scheduleService.getSchedulesAndCategory(request.memberId(), request.categoryId());
-        }
+        List<Schedule> schedules = scheduleService.getSchedules(request.memberId(), request.categoryId());
         List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
         return ResponseEntity.ok(new Result<>(response.size(), response));
     }
@@ -48,12 +43,8 @@ public class ScheduleController {
 
         CreateDateRange createDateRange = CreateDateRange.monthOf(year, month);
 
-        List<Schedule> schedules;
-        if (request.categoryId() == null) {
-            schedules = scheduleService.getSchedulesByYearAndMonth(createDateRange.startDateTime(), createDateRange.endDateTime(), request.memberId());
-        } else {
-            schedules = scheduleService.getSchedulesByYearAndMonthAndCategory(createDateRange.startDateTime(), createDateRange.endDateTime(), request.memberId(), request.categoryId());
-        }
+        List<Schedule> schedules = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), request.memberId(), request.categoryId());
+
         List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
         return ResponseEntity.ok(new Result<>(response.size(), response));
     }
@@ -68,12 +59,7 @@ public class ScheduleController {
 
         CreateDateRange createDateRange = CreateDateRange.dateOf(searchDate);
 
-        List<Schedule> schedules;
-        if (request.categoryId() == null) {
-            schedules = scheduleService.getSearchDates(createDateRange.startDateTime(), createDateRange.endDateTime(), request.memberId());
-        } else {
-            schedules = scheduleService.getSearchDatesAndCategory(createDateRange.startDateTime(), createDateRange.endDateTime(), request.memberId(), request.categoryId());
-        }
+        List<Schedule> schedules = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), request.memberId(), request.categoryId());
 
         List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
         return ResponseEntity.ok(new Result<>(response.size(), response));
