@@ -39,11 +39,12 @@ public class ScheduleController {
     public ResponseEntity<Result<List<ScheduleResponse>>> getSchedulesByYearANdMonth(
             @PathVariable int year,
             @PathVariable int month,
-            @RequestBody @Valid ScheduleRequest request) {
+            @RequestParam Long memberId,
+            @RequestParam(required = false) Long categoryId) {
 
         CreateDateRange createDateRange = CreateDateRange.monthOf(year, month);
 
-        List<Schedule> schedules = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), request.memberId(), request.categoryId());
+        List<Schedule> schedules = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), memberId, categoryId);
 
         List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
         return ResponseEntity.ok(new Result<>(response.size(), response));
@@ -55,11 +56,12 @@ public class ScheduleController {
             @PathVariable int year,
             @PathVariable int month,
             @RequestParam("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate searchDate,
-            @RequestBody @Valid ScheduleRequest request) {
+            @RequestParam Long memberId,
+            @RequestParam(required = false) Long categoryId) {
 
         CreateDateRange createDateRange = CreateDateRange.dateOf(searchDate);
 
-        List<Schedule> schedules = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), request.memberId(), request.categoryId());
+        List<Schedule> schedules = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), memberId, categoryId);
 
         List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
         return ResponseEntity.ok(new Result<>(response.size(), response));
