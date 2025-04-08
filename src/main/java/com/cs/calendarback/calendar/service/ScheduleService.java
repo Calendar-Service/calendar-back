@@ -30,14 +30,14 @@ public class ScheduleService {
 
     public List<Schedule> getSchedules(Long memberId, Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CoreException(ErrorType.CATEGORY_NOT_FOUND, categoryId));
-        Long resolvedCategoryId = Category.resolveCategoryId(category);
+        Long resolvedCategoryId = Category.getIdOrNullIfSchedule(category);
 
         return scheduleRepository.findSchedules(memberId, resolvedCategoryId);
     }
 
     public List<Schedule> getSchedulesByDateRange(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId, Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CoreException(ErrorType.CATEGORY_NOT_FOUND, categoryId));
-        Long resolvedCategoryId = Category.resolveCategoryId(category);
+        Long resolvedCategoryId = Category.getIdOrNullIfSchedule(category);
 
         return scheduleRepository.findSchedulesByDateRange(startDateTime, endDateTime, memberId, resolvedCategoryId);
     }

@@ -41,7 +41,7 @@ public class Category {
         return new Category(id, name, member, new ArrayList<>());
     }
 
-    public static Long resolveCategoryId(Category category) {
+    public static Long getIdOrNullIfSchedule(Category category) {
         return CategoryItem.SCHEDULE.getName().equals(category.getName()) ? null : category.getId();
     }
 }

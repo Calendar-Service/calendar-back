@@ -112,7 +112,7 @@ class ScheduleServiceTest {
     @DisplayName("모든 스케줄 조회")
     void getSchedules() {
         // given
-        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedules(member.getId(), Category.resolveCategoryId(category));
+        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedules(member.getId(), Category.getIdOrNullIfSchedule(category));
         doReturn(Optional.of(category)).when(categoryRepository).findById(category.getId());
         // when
         List<Schedule> result = scheduleService.getSchedules(member.getId(), categories.get(0).getId());
@@ -134,7 +134,7 @@ class ScheduleServiceTest {
     void getSchedulesByYearAndMonth() {
         // given
         CreateDateRange createDateRange = CreateDateRange.monthOf(year, month);
-        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), Category.resolveCategoryId(category));
+        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), Category.getIdOrNullIfSchedule(category));
         doReturn(Optional.of(category)).when(categoryRepository).findById(category.getId());
         // when
         List<Schedule> result = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
@@ -159,7 +159,7 @@ class ScheduleServiceTest {
     void getSearchDates() {
         // given
         CreateDateRange createDateRange = CreateDateRange.dateOf(seachDate);
-        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), Category.resolveCategoryId(category));
+        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), Category.getIdOrNullIfSchedule(category));
         doReturn(Optional.of(category)).when(categoryRepository).findById(category.getId());
         // when
         List<Schedule> result = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
