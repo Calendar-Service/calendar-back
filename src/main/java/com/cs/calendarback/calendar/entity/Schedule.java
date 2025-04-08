@@ -40,14 +40,18 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public static Schedule create(String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Member member) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public static Schedule create(String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Member member, Category category) {
         validateDates(startDateTime, endDateTime);
-        return new Schedule(null, title, note, startDateTime, endDateTime, member);
+        return new Schedule(null, title, note, startDateTime, endDateTime, member, category);
     }
 
-    public static Schedule update(Long id, String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Member member) {
+    public static Schedule update(Long id, String title, String note, LocalDateTime startDateTime, LocalDateTime endDateTime, Member member, Category category) {
         validateDates(startDateTime, endDateTime);
-        return new Schedule(id, title, note, startDateTime, endDateTime, member);
+        return new Schedule(id, title, note, startDateTime, endDateTime, member, category);
     }
 
     public static void validateDates(LocalDateTime startDateTime, LocalDateTime endDateTime) {

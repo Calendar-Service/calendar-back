@@ -1,9 +1,7 @@
 package com.cs.calendarback.calendar.controller;
 
 
-import com.cs.calendarback.calendar.dto.Result;
-import com.cs.calendarback.calendar.dto.ScheduleRequest;
-import com.cs.calendarback.calendar.dto.ScheduleResponse;
+import com.cs.calendarback.calendar.dto.*;
 import com.cs.calendarback.calendar.entity.Schedule;
 import com.cs.calendarback.calendar.service.ScheduleService;
 import com.cs.calendarback.config.exception.ErrorResponse;
@@ -30,8 +28,8 @@ public class ScheduleController {
 
     @Operation(summary = "모든 일정 조회", description = "등록된 모든 일정를 조회합니다.")
     @GetMapping
-    public ResponseEntity<Result<List<ScheduleResponse>>> getSchedules() {
-        List<Schedule> schedules = scheduleService.getSchedules();
+    public ResponseEntity<Result<List<ScheduleResponse>>> getSchedules(@RequestBody @Valid ScheduleRequest request) {
+        List<Schedule> schedules = scheduleService.getSchedules(request.memberId(), request.categoryId());
         List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
         return ResponseEntity.ok(new Result<>(response.size(), response));
     }
@@ -40,8 +38,14 @@ public class ScheduleController {
     @GetMapping("/{year}/{month}")
     public ResponseEntity<Result<List<ScheduleResponse>>> getSchedulesByYearANdMonth(
             @PathVariable int year,
-            @PathVariable int month) {
-        List<Schedule> schedules = scheduleService.getSchedulesByYearAndMonth(year, month);
+            @PathVariable int month,
+            @RequestParam Long memberId,
+            @RequestParam(required = false) Long categoryId) {
+
+        CreateDateRange createDateRange = CreateDateRange.monthOf(year, month);
+
+        List<Schedule> schedules = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), memberId, categoryId);
+
         List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
         return ResponseEntity.ok(new Result<>(response.size(), response));
     }
@@ -51,9 +55,14 @@ public class ScheduleController {
     public ResponseEntity<Result<List<ScheduleResponse>>> getSchedulesByDate(
             @PathVariable int year,
             @PathVariable int month,
-            @RequestParam("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate searchDate) {
+            @RequestParam("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate searchDate,
+            @RequestParam Long memberId,
+            @RequestParam(required = false) Long categoryId) {
 
-        List<Schedule> schedules = scheduleService.getSearchDates(searchDate);
+        CreateDateRange createDateRange = CreateDateRange.dateOf(searchDate);
+
+        List<Schedule> schedules = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), memberId, categoryId);
+
         List<ScheduleResponse> response = schedules.stream().map(ScheduleResponse::from).toList();
         return ResponseEntity.ok(new Result<>(response.size(), response));
     }
@@ -63,7 +72,7 @@ public class ScheduleController {
             @ApiResponse(responseCode = "200", description = "일정 등록 성공"),
     })
     @PostMapping
-    public ResponseEntity<ScheduleResponse> create(@RequestBody @Valid ScheduleRequest request) {
+    public ResponseEntity<ScheduleResponse> create(@RequestBody @Valid ScheduleCreateRequest request) {
         Schedule schedule = scheduleService.create(request);
         return ResponseEntity.ok(ScheduleResponse.from(schedule));
     }
@@ -89,7 +98,7 @@ public class ScheduleController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ScheduleResponse> update(@PathVariable("id") Long id, @RequestBody @Valid ScheduleRequest request) {
+    public ResponseEntity<ScheduleResponse> update(@PathVariable("id") Long id, @RequestBody @Valid ScheduleCreateRequest request) {
         Schedule updated = scheduleService.update(id, request);
         return ResponseEntity.ok(ScheduleResponse.from(updated));
     }

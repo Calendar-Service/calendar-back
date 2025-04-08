@@ -12,7 +12,9 @@ public record ScheduleResponse(
         String note,
         String startDateTime,
         String endDateTime,
-        Long memberId
+        Long memberId,
+        String nickName,
+        String name
 ) {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -23,7 +25,9 @@ public record ScheduleResponse(
                 schedule.getNote(),
                 schedule.getStartDateTime().format(FORMATTER),
                 schedule.getEndDateTime().format(FORMATTER),
-                schedule.getMember().getId()
+                schedule.getMember().getId(),
+                schedule.getMember().getNickName(),
+                schedule.getCategory().getName()
         );
     }
 
