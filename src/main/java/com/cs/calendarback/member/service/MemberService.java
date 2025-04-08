@@ -1,7 +1,7 @@
 package com.cs.calendarback.member.service;
 
 import com.cs.calendarback.calendar.entity.Category;
-import com.cs.calendarback.calendar.entity.enums.DefaultCategory;
+import com.cs.calendarback.calendar.entity.enums.CategoryItem;
 import com.cs.calendarback.calendar.repository.CategoryRepository;
 import com.cs.calendarback.login.dto.KakaoMemberResponse;
 import com.cs.calendarback.member.entity.Member;
@@ -42,7 +42,7 @@ public class MemberService {
                     null
             ));
 
-            List<Category> categories = Arrays.stream(DefaultCategory.values())
+            List<Category> categories = Arrays.stream(CategoryItem.values())
                     .map(category -> Category.create(category.getName(), member))
                     .toList();
 

@@ -1,5 +1,6 @@
 package com.cs.calendarback.calendar.entity;
 
+import com.cs.calendarback.calendar.entity.enums.CategoryItem;
 import com.cs.calendarback.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -38,5 +39,9 @@ public class Category {
 
     public static Category update(Long id, String name, Member member) {
         return new Category(id, name, member, new ArrayList<>());
+    }
+
+    public static Long resolveCategoryId(Category category) {
+        return CategoryItem.SCHEDULE.getName().equals(category.getName()) ? null : category.getId();
     }
 }

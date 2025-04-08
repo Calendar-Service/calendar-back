@@ -24,6 +24,7 @@ public record ScheduleCreateRequest(
         @NotNull(message = "사용자 ID 필수 입력 값입니다.")
         Long memberId,
 
+        @NotNull(message = "카테고리 ID 필수 입력 값입니다.")
         Long categoryId
 ) {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -44,7 +45,4 @@ public record ScheduleCreateRequest(
         }
     }
 
-    public Long categoryId() {
-        return categoryId != null ? categoryId : 1L;
-    }
 }

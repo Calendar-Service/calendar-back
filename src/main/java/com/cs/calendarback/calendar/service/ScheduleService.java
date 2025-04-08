@@ -29,18 +29,24 @@ public class ScheduleService {
     private final CategoryRepository categoryRepository;
 
     public List<Schedule> getSchedules(Long memberId, Long categoryId) {
-        return scheduleRepository.findSchedules(memberId, categoryId);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CoreException(ErrorType.CATEGORY_NOT_FOUND, categoryId));
+        Long resolvedCategoryId = Category.resolveCategoryId(category);
+
+        return scheduleRepository.findSchedules(memberId, resolvedCategoryId);
     }
 
     public List<Schedule> getSchedulesByDateRange(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId, Long categoryId) {
-        return scheduleRepository.findSchedulesByDateRange(startDateTime, endDateTime, memberId, categoryId);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CoreException(ErrorType.CATEGORY_NOT_FOUND, categoryId));
+        Long resolvedCategoryId = Category.resolveCategoryId(category);
+
+        return scheduleRepository.findSchedulesByDateRange(startDateTime, endDateTime, memberId, resolvedCategoryId);
     }
 
     @Transactional
     public Schedule create(ScheduleCreateRequest request) {
 
-        Member member = memberRepository.findById(request.memberId()).orElseThrow(()-> new CoreException(ErrorType.MEMBER_NOT_FOUND, request.memberId()));
-        Category category =categoryRepository.findById(request.categoryId()).orElseThrow(()->new CoreException(ErrorType.CATEGORY_NOT_FOUND, request.categoryId()));
+        Member member = memberRepository.findById(request.memberId()).orElseThrow(() -> new CoreException(ErrorType.MEMBER_NOT_FOUND, request.memberId()));
+        Category category = categoryRepository.findById(request.categoryId()).orElseThrow(() -> new CoreException(ErrorType.CATEGORY_NOT_FOUND, request.categoryId()));
 
         Schedule schedule = Schedule.create(request.title(), request.note(), request.toStartDateTime(), request.toEndDateTime(), member, category);
         return scheduleRepository.save(schedule);
@@ -52,8 +58,8 @@ public class ScheduleService {
 
     @Transactional
     public Schedule update(Long id, ScheduleCreateRequest request) {
-        Member member = memberRepository.findById(request.memberId()).orElseThrow(()-> new CoreException(ErrorType.MEMBER_NOT_FOUND, request.memberId()));
-        Category category =categoryRepository.findById(request.categoryId()).orElseThrow(()->new CoreException(ErrorType.CATEGORY_NOT_FOUND, request.categoryId()));
+        Member member = memberRepository.findById(request.memberId()).orElseThrow(() -> new CoreException(ErrorType.MEMBER_NOT_FOUND, request.memberId()));
+        Category category = categoryRepository.findById(request.categoryId()).orElseThrow(() -> new CoreException(ErrorType.CATEGORY_NOT_FOUND, request.categoryId()));
         scheduleRepository.findById(id).orElseThrow(() -> new CoreException(ErrorType.SCHEDULE_NOT_FOUND, id));
         Schedule schedule = Schedule.update(id, request.title(), request.note(), request.toStartDateTime(), request.toEndDateTime(), member, category);
         return scheduleRepository.save(schedule);

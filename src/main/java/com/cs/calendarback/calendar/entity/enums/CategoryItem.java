@@ -1,12 +1,13 @@
 package com.cs.calendarback.calendar.entity.enums;
 
-public enum DefaultCategory {
+public enum CategoryItem {
+    SCHEDULE("알정"),
     FRIEND("친구"),
     FAMILY("가족");
 
     private final String name;
 
-    DefaultCategory(String name) {
+    CategoryItem(String name) {
         this.name = name;
     }
 

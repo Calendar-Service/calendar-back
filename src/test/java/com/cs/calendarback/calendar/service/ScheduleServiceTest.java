@@ -4,9 +4,11 @@ import com.cs.calendarback.calendar.dto.CreateDateRange;
 import com.cs.calendarback.calendar.dto.ScheduleCreateRequest;
 import com.cs.calendarback.calendar.entity.Category;
 import com.cs.calendarback.calendar.entity.Schedule;
-import com.cs.calendarback.calendar.entity.enums.DefaultCategory;
+import com.cs.calendarback.calendar.entity.enums.CategoryItem;
 import com.cs.calendarback.calendar.repository.CategoryRepository;
 import com.cs.calendarback.calendar.repository.ScheduleRepository;
+import com.cs.calendarback.config.exception.CoreException;
+import com.cs.calendarback.config.exception.ErrorType;
 import com.cs.calendarback.member.entity.Member;
 import com.cs.calendarback.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,8 +69,9 @@ class ScheduleServiceTest {
         member = Member.update(1L, "이승원", 12L, "ee@naver.com");
 
         categories = List.of(
-                Category.update(1L, DefaultCategory.FAMILY.getName(), member),
-                Category.update(2L, DefaultCategory.FRIEND.getName(), member)
+                Category.update(1L, CategoryItem.SCHEDULE.getName(), member),
+                Category.update(2L, CategoryItem.FAMILY.getName(), member),
+                Category.update(3L, CategoryItem.FRIEND.getName(), member)
         );
 
         schedules = List.of(
@@ -80,7 +83,7 @@ class ScheduleServiceTest {
                 Schedule.update(1L, "일정1", "일정 테스트1", LocalDateTime.now(), LocalDateTime.now(), member, categories.get(0))
         );
 
-        category = Category.update(1L, DefaultCategory.FAMILY.getName(), member);
+        category = Category.update(1L, CategoryItem.SCHEDULE.getName(), member);
         schedule = Schedule.update(1L, "일정1", "일정 테스트1", LocalDateTime.now(), LocalDateTime.now(), member, categories.get(0));
         scheduleUpdate = Schedule.update(1L, "일정 수정", "일정 노트 수정", LocalDateTime.now(), LocalDateTime.now(), member, categories.get(0));
 
@@ -91,7 +94,7 @@ class ScheduleServiceTest {
                 LocalDateTime.now().format(formatter), // LocalDateTime -> String 변환
                 LocalDateTime.now().plusHours(1).format(formatter), // LocalDateTime -> String 변환
                 member.getId(),
-                null
+                category.getId()
         );
 
         updateRequest = new ScheduleCreateRequest(
@@ -100,7 +103,7 @@ class ScheduleServiceTest {
                 LocalDateTime.now().format(formatter), // LocalDateTime -> String 변환
                 LocalDateTime.now().plusHours(1).format(formatter), // LocalDateTime -> String 변환
                 member.getId(),
-                1L
+                category.getId()
         );
     }
 
@@ -109,8 +112,8 @@ class ScheduleServiceTest {
     @DisplayName("모든 스케줄 조회")
     void getSchedules() {
         // given
-        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedules(member.getId(), categories.get(0).getId());
-
+        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedules(member.getId(), Category.resolveCategoryId(category));
+        doReturn(Optional.of(category)).when(categoryRepository).findById(category.getId());
         // when
         List<Schedule> result = scheduleService.getSchedules(member.getId(), categories.get(0).getId());
 
@@ -131,8 +134,8 @@ class ScheduleServiceTest {
     void getSchedulesByYearAndMonth() {
         // given
         CreateDateRange createDateRange = CreateDateRange.monthOf(year, month);
-        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
-
+        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), Category.resolveCategoryId(category));
+        doReturn(Optional.of(category)).when(categoryRepository).findById(category.getId());
         // when
         List<Schedule> result = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
 
@@ -156,8 +159,8 @@ class ScheduleServiceTest {
     void getSearchDates() {
         // given
         CreateDateRange createDateRange = CreateDateRange.dateOf(seachDate);
-        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
-
+        doReturn(schedulesAndCategory).when(scheduleRepository).findSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), Category.resolveCategoryId(category));
+        doReturn(Optional.of(category)).when(categoryRepository).findById(category.getId());
         // when
         List<Schedule> result = scheduleService.getSchedulesByDateRange(createDateRange.startDateTime(), createDateRange.endDateTime(), member.getId(), categories.get(0).getId());
         // then
