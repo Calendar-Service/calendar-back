@@ -1,5 +1,6 @@
 package com.cs.calendarback.member.entity;
 
+import com.cs.calendarback.board.entity.Board;
 import com.cs.calendarback.calendar.entity.Category;
 import com.cs.calendarback.calendar.entity.Schedule;
 import com.cs.calendarback.calendar.entity.common.BaseEntity;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
 @Entity
 public class Member extends BaseEntity {
@@ -36,10 +36,20 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Category> categories = new ArrayList<>();
 
+    @OneToMany(mappedBy="member")
+    private List<Board> boards = new ArrayList<>();
+
+    public Member(Long id, String nickName, Long authId, String email) {
+        this.id = id;
+        this.nickName = nickName;
+        this.authId = authId;
+        this.email = email;
+    }
+
     public static Member create(String nickName, Long authId, String email ) {
-        return new Member(null, nickName, authId, email, new ArrayList<>(), new ArrayList<>());
+        return new Member(null, nickName, authId, email);
     }
     public static Member update(Long id, String nickName, Long authId, String email ) {
-        return new Member(id, nickName, authId, email, new ArrayList<>(), new ArrayList<>());
+        return new Member(id, nickName, authId, email);
     }
 }

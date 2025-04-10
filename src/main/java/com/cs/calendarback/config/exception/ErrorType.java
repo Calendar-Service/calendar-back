@@ -11,6 +11,7 @@ public enum ErrorType {
     SCHEDULE_NOT_FOUND(ErrorCode.NOT_FOUND, "일정을 찾을 수 없습니다.", LogLevel.WARN),
     INVALID_DATE_FORMAT(ErrorCode.BAD_REQUEST, "날짜의 형식이 올바르지 않습니다.", LogLevel.WARN)
 
+    , BOARD_NOT_FOUND(ErrorCode.NOT_FOUND, "게시물을 찾을 수 없습니다.", LogLevel.WARN)
     , MEMBER_NOT_FOUND(ErrorCode.NOT_FOUND, "회원을 찾을 수 없습니다.", LogLevel.WARN)
     , CATEGORY_NOT_FOUND(ErrorCode.NOT_FOUND, "카테고리를 찾을 수 없습니다.", LogLevel.WARN)
 
