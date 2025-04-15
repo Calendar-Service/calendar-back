@@ -5,9 +5,12 @@ import com.cs.calendarback.board.dto.BoardResponse;
 import com.cs.calendarback.board.dto.BoardUpdateRequest;
 import com.cs.calendarback.board.entity.Board;
 import com.cs.calendarback.board.service.BoardService;
+import com.cs.calendarback.board.dto.BoardPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,5 +41,12 @@ public class BoardController {
     public ResponseEntity<Void> delete(@PathVariable("boardId") Long boardId) {
         boardService.delete(boardId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<BoardPageResponse> readAll(@RequestParam("page") Long page, @RequestParam("pageSize") Long pageSize) {
+        List<BoardResponse> boardResponses = boardService.readAll(page, pageSize).stream().map(BoardResponse::from).toList();
+        Long count = boardService.count(page, pageSize);
+        return ResponseEntity.ok(BoardPageResponse.from(boardResponses, count));
     }
 }
