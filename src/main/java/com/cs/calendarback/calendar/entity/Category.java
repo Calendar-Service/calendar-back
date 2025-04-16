@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
 @Entity
 @Table(name = "category")
@@ -33,12 +32,18 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Schedule> schedules = new ArrayList<>();
 
+    public Category(Long id, String name, Member member) {
+        this.id = id;
+        this.name = name;
+        this.member = member;
+    }
+
     public static Category create(String name, Member member) {
-        return new Category(null, name, member, new ArrayList<>());
+        return new Category(null, name, member);
     }
 
     public static Category update(Long id, String name, Member member) {
-        return new Category(id, name, member, new ArrayList<>());
+        return new Category(id, name, member);
     }
 
     public static Long getIdOrNullIfSchedule(Category category) {
