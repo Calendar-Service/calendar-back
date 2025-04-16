@@ -38,10 +38,8 @@ public class PaymentController {
 
         if (statusCode == 200) {
             try {
-                // TODO: 결제 정보를 DB에 저장하는 로직
                 return ResponseEntity.ok(responseBody); // 정상 응답
             } catch (Exception e) {
-                // TODO: 결제 취소 요청 추가
                 return ResponseEntity.status(500).body("결제 승인에는 성공했지만, 서버 내부 문제로 결제 데이터를 저장하지 못했습니다. 결제를 취소했습니다.");
             }
         } else {
